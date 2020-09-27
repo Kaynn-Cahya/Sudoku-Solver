@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace SudokuSolver {
     public class SudokuGrid {
 
-        private class Subgrid { 
+        internal class Subgrid { 
             // The ranges this subgrid should cover in the main grid.
             public int MinX { get; private set; }
             public int MaxX { get; private set; }
@@ -30,7 +30,7 @@ namespace SudokuSolver {
 
                 for (int x = MinX; x < MaxX; ++x) {
                     for (int y = MinY; y < MaxY; ++y) {
-                        int currValue = gridRef.grid[9, 9];
+                        int currValue = gridRef.grid[x, y];
 
                         if (currValue == 0) {
                             continue;
@@ -48,11 +48,30 @@ namespace SudokuSolver {
             public bool IsInSubgrid(int X, int Y) {
                 return X >= MinX && X < MaxX && Y >= MinY && Y < MaxY;
             }
+
+            /// <summary>
+            /// Fetch numbers that is used in this subgrid
+            /// </summary>
+            public List<int> GetOccupiedNumbers() {
+                List<int> occupying = new List<int>();
+
+                for (int x = MinX; x < MaxX; ++x) {
+                    for (int y = MinY; y < MaxY; ++y) {
+                        var currValue = gridRef.grid[x, y];
+
+                        if (currValue != 0 && !occupying.Contains(currValue)) {
+                            occupying.Add(currValue);
+                        }
+                    }
+                }
+
+                return occupying;
+            }
         }
 
         internal int[,] grid = new int[9,9];
 
-        private HashSet<Subgrid> subgrids;
+        internal HashSet<Subgrid> subgrids;
 
         public SudokuGrid(int[,] populatedGrid) {
             PopulateGrid(populatedGrid);
@@ -126,6 +145,66 @@ namespace SudokuSolver {
                     subgrids.Add(currSubgrid);
                 }
             }
+        }
+
+        public bool IsInCorrectState() {
+            foreach (var subgrid in subgrids) {
+                if (!subgrid.IsValid()) {
+                    return false;
+                }
+            }
+
+            if (RowsHaveDuplicates()) {
+                return false;
+            } else if (ColumnsHaveDuplicates()) {
+                return false;
+            }
+
+            return true;
+
+            #region Local_Function
+
+            bool RowsHaveDuplicates() {
+                for (int y = 0; y < 9; ++y) {
+                    List<int> values = new List<int>();
+
+                    for (int x = 0; x < 9; ++x) {
+                        int currValue = grid[x, y];
+
+                        if (currValue == 0) {
+                            continue;
+                        } else if (values.Contains(currValue)) {
+                            return true;
+                        } else {
+                            values.Add(currValue);
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            bool ColumnsHaveDuplicates() {
+                for (int x = 0; x < 9; ++x) {
+                    List<int> values = new List<int>();
+
+                    for (int y = 0; y < 9; ++y) {
+                        int currValue = grid[x, y];
+
+                        if (currValue == 0) {
+                            continue;
+                        } else if (values.Contains(currValue)) {
+                            return true;
+                        } else {
+                            values.Add(currValue);
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            #endregion
         }
     }
 }
