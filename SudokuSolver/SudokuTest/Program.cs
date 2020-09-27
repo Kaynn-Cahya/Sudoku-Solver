@@ -1,14 +1,23 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 
 using SudokuSolver;
 
 namespace SudokuTest {
     class Program {
         static void Main(string[] args) {
-            // TODO: Test cases
+            int[,] grid = new int[9,9] {
+                { 0, 5, 0, 0, 0, 8, 0, 0, 0 },
+                { 2, 0, 0, 0, 0, 5, 1, 0, 6 },
+                { 0, 0, 8, 2, 0, 0, 5, 0, 0 },
+                { 3, 9, 0, 0, 0, 0, 8, 0, 0 },
+                { 0, 0, 5, 0, 0, 0, 3, 0, 7 },
+                { 0, 0, 0, 0, 0, 0, 0, 6, 1 },
+                { 5, 3, 9, 1, 0, 7, 0, 0, 8 },
+                { 7, 0, 0, 0, 0, 3, 4, 1, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+            };
 
-            SudokuGrid sudokuGrid = new SudokuGrid();
+            SudokuGrid sudokuGrid = new SudokuGrid(grid);
 
             sudokuGrid.PrintGrid();
 
