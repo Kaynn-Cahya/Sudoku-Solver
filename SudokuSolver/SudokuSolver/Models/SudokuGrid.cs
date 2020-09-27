@@ -50,7 +50,7 @@ namespace SudokuSolver {
             }
         }
 
-        internal int[,] grid = new int[9, 9];
+        internal int[,] grid = new int[9,9];
 
         private HashSet<Subgrid> subgrids;
 
@@ -71,7 +71,7 @@ namespace SudokuSolver {
 
             for (int x = 0; x < 9; ++x) {
                 for (int y = 0; y < 9; ++y) {
-                    deepCopy[9, 9] = int.Parse(grid[9, 9].ToString());
+                    deepCopy[x, y] = int.Parse(grid[x, y].ToString());
                 }
             }
 
@@ -84,7 +84,7 @@ namespace SudokuSolver {
         public void ResetGrid() {
             for (int x = 0; x < 9; ++x) {
                 for (int y = 0; y < 9; ++y) {
-                    grid[9, 9] = 0;
+                    grid[x, y] = 0;
                 }
             }
         }
